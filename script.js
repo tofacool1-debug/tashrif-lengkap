@@ -4,77 +4,68 @@ const selectFiil = document.getElementById('fiil');
 const hasilDiv = document.getElementById('hasil');
 const btnTampil = document.getElementById('btnTampil');
 
-// 1. Isi dropdown huruf pas bab dipilih
+// Isi huruf
 selectBab.addEventListener('change', () => {
   selectHuruf.innerHTML = '<option value="">Pilih Huruf</option>';
   selectFiil.innerHTML = '<option value="">Pilih Fiil</option>';
   hasilDiv.innerHTML = '';
-
   let hurufList = Object.keys(dataBab[selectBab.value] || {});
   hurufList.forEach(h => {
     selectHuruf.innerHTML += `<option value="${h}">${h}</option>`;
   });
 });
 
-// 2. Isi dropdown fiil pas huruf dipilih
+// Isi fiil - PENTING: value nya root polos tanpa harakat
 selectHuruf.addEventListener('change', () => {
   selectFiil.innerHTML = '<option value="">Pilih Fiil Madhi</option>';
   hasilDiv.innerHTML = '';
-
   let fiilList = dataBab[selectBab.value][selectHuruf.value] || [];
   fiilList.forEach(f => {
-    selectFiil.innerHTML += `<option value="${f.madhi}">${f.madhi} - ${f.arti}</option>`;
+    // Hapus harakat buat jadi root
+    let root = f.madhi.replace(/[ًٌٍَُِّْ]/g, '');
+    selectFiil.innerHTML += `<option value="${root}">${f.madhi} - ${f.arti}</option>`;
   });
 });
 
-// 3. Fungsi utama: ambil tasrif dari sarf.c4a8.com
+// Ambil tasrif dari Qutrub langsung
 btnTampil.addEventListener('click', async () => {
-  let madhi = selectFiil.value;
-  if(!madhi) {
-    alert('Pilih fiil dulu bang!');
-    return;
-  }
+  let root = selectFiil.value;
+  if(!root) return alert('Pilih fiil dulu bang!');
 
-  // Ambil root 3 huruf dari madhi, contoh: كتب
-  let root = madhi.replace(/[ًٌٍَُِّْ]/g, '');
   hasilDiv.innerHTML = '<p style="text-align:center">⏳ Mengambil data tasrif...</p>';
 
   try {
-    let res = await fetch(`https://sarf.c4a8.com/api/?root=${encodeURIComponent(root)}`);
-    if(!res.ok) throw new Error('API error');
+    // Qutrub versi JSON API, gak kena CORS
+    let url = `https://qutrub.arabeyes.org/sarf-json.php?verb=${root}&bab=1`;
+    let res = await fetch(url);
     let data = await res.json();
 
-    // Ambil semua shighoh, kasih fallback "-" kalo kosong
-    let tasrif = {
-      'الماضي': data.madi?.[0] || madhi,
-      'المضارع': data.mudari?.[0] || '-',
-      'الأمر': data.amr?.[0] || '-',
-      'النهي': data.nahi?.[0] || '-',
-      'المصدر': data.masdar?.[0] || '-',
-      'اسم الفاعل': data.isem_fael?.[0] || '-',
-      'اسم المفعول': data.isem_mafoul?.[0] || '-',
-      'صيغة المبالغة': data.sighat_mubalaghah?.[0] || '-',
-      'اسم التفضيل': data.isem_tafdheel?.[0] || '-',
-      'اسم الزمان': data.isem_zaman?.[0] || '-',
-      'اسم المكان': data.isem_makan?.[0] || '-',
-      'اسم الآلة': data.isem_alah?.[0] || '-'
-    };
+    if(!data || data.error) throw new Error('Fiil gak ketemu');
 
-    // Tampilkan pake CSS elegan
-    let html = `<h3>📖 تَصْرِيف: ${madhi} - ${selectFiil.options[selectFiil.selectedIndex].text.split(' - ')[1]}</h3>`;
-    html += `<table>`;
-    html += `<tr><th>الاصطلاح</th><th>الصيغة</th></tr>`;
-
-    for(let key in tasrif) {
-      html += `<tr><td>${key}</td><td class="arab">${tasrif[key]}</td></tr>`;
-    }
-    html += `</table>`;
-    html += `<small style="opacity:0.7">Sumber: sarf.c4a8.com</small>`;
-
-    hasilDiv.innerHTML = html;
+    // 12 shighoh lengkap
+    let tabel = `
+      <h3>📖 تَصْرِيف: ${root}</h3>
+      <table>
+        <tr><th>الاصطلاح</th><th>الصيغة</th></tr>
+        <tr><td>الماضي</td><td class="arab">${data.past || '-'}</td></tr>
+        <tr><td>المضارع</td><td class="arab">${data.present || '-'}</td></tr>
+        <tr><td>الأمر</td><td class="arab">${data.imperative || '-'}</td></tr>
+        <tr><td>النهي</td><td class="arab">${data.prohibitive || '-'}</td></tr>
+        <tr><td>المصدر</td><td class="arab">${data.masdar || '-'}</td></tr>
+        <tr><td>اسم الفاعل</td><td class="arab">${data.active_participle || '-'}</td></tr>
+        <tr><td>اسم المفعول</td><td class="arab">${data.passive_participle || '-'}</td></tr>
+        <tr><td>صيغة المبالغة</td><td class="arab">${data.intensive || '-'}</td></tr>
+        <tr><td>اسم التفضيل</td><td class="arab">${data.comparative || '-'}</td></tr>
+        <tr><td>اسم الزمان</td><td class="arab">${data.time_noun || '-'}</td></tr>
+        <tr><td>اسم المكان</td><td class="arab">${data.place_noun || '-'}</td></tr>
+        <tr><td>اسم الآلة</td><td class="arab">${data.instrument_noun || '-'}</td></tr>
+      </table>
+      <small style="opacity:0.7">Sumber: Qutrub Arabeyes.org</small>
+    `;
+    hasilDiv.innerHTML = tabel;
 
   } catch(e) {
     console.error(e);
-    hasilDiv.innerHTML = `<p style="color:red; text-align:center">❌ Gagal ambil data. Cek internet / kata dasarnya.</p>`;
+    hasilDiv.innerHTML = `<p style="color:red; text-align:center">❌ Error: ${e.message}. Coba fiil lain.</p>`;
   }
 });
