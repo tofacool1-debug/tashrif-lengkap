@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mu'jam Tashrif Pro - Munawwir & Munjid Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Amiri', serif; background-color: #f8fafc; }
+        .arabic-text { font-family: 'Lateef', cursive; font-size: 2.4rem; line-height: 1.2; }
+        .font-sans-custom { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        .active-shighah { border: 3px solid #4f46e5 !important; background-color: #eef2ff !important; transform: scale(1.02); }
+        .masdar-badge { font-size: 0.8rem; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 9999px; margin-right: 5px; }
+    </style>
+</head>
+<body class="p-4 md:p-8" dir="ltr">
+
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-indigo-950 text-white p-8 rounded-t-3xl shadow-2xl border-b-4 border-amber-500">
+            <h1 class="text-3xl font-bold mb-2">Sistem Mu'jam & Tashrif Terpadu</h1>
+            <p class="opacity-75 font-sans-custom">Rujukan: Al-Munawwir, Al-Munjid, & Lisanul Arab</p>
+        </div>
+
+        <div class="bg-white p-6 shadow-xl flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative flex-1 w-full">
+                <input type="text" id="searchInput" placeholder="Ketik kata dasar (contoh: نصر atau استخرج)..." 
+                class="w-full p-4 pr-12 border-2 border-slate-200 rounded-2xl focus:border-amber-500 outline-none text-right arabic-text h-16">
+                <div class="absolute left-4 top-4 text-slate-400 font-sans-custom">Mode Ketik</div>
+            </div>
+            <button onclick="cariLafadz()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-10 py-4 rounded-2xl shadow-lg transition-all font-sans-custom">
+                Cari & Analisa
+            </div>
+        </div>
+
+        <div id="resultPanel" class="hidden">
+            <div class="bg-slate-50 border-x border-b p-6 flex flex-wrap gap-6 items-center justify-between">
+                <div class="flex gap-4">
+                    <div class="bg-white px-4 py-2 rounded-lg border shadow-sm">
+                        <span class="text-xs text-slate-500 block font-sans-custom">Bina'</span>
+                        <span id="resBina" class="font-bold text-indigo-900"></span>
+                    </div>
+                    <div class="bg-white px-4 py-2 rounded-lg border shadow-sm">
+                        <span class="text-xs text-slate-500 block font-sans-custom">Klasifikasi</span>
+                        <span id="resBab" class="font-bold text-indigo-900"></span>
+                    </div>
+                </div>
+                <div class="flex-1 text-right">
+                    <span class="text-xs text-slate-500 block font-sans-custom">Arti (Munawwir/Munjid)</span>
+                    <span id="resArti" class="text-lg italic text-slate-700"></span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 border-x shadow-sm">
+                <h3 class="font-sans-custom font-bold text-slate-800 mb-4 border-l-4 border-indigo-600 pl-3">Tashrif Istilahiy (Klik untuk Lughawiy)</h3>
+                <div id="istilahiyGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    </div>
+            </div>
+
+            <div class="bg-indigo-50 p-6 rounded-b-3xl border shadow-inner">
+                <h3 class="font-sans-custom font-bold text-slate-800 mb-4">Tashrif Lughawiy (14 Dhomir): <span id="targetLughawiy" class="text-indigo-600"></span></h3>
+                <div class="overflow-x-auto bg-white rounded-2xl shadow-sm">
+                    <table class="w-full text-right">
+                        <thead class="bg-slate-100 border-b">
+                            <tr class="font-sans-custom text-slate-600 text-sm">
+                                <th class="p-4 text-left">Dhomir</th>
+                                <th class="p-4">Lafadz Konjugasi</th>
+                                <th class="p-4 text-center">Catatan I'lal/Imla'</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lughawiyBody" class="arabic-text">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MASTER DATABASE: Merujuk Munawwir, Munjid & Lisanul Arab
+        const MUJAM_DATA = {
+            "نصر": {
+                bina: "Salim", bab: "Tsulatsi Mujarrad", arti: "Menolong / Membantu",
+                istilahiy: {
+                    madhi: "نَصَرَ", mudhori: "يَنْصُرُ", masdar: ["نَصْرًا", "نُصْرَانًا"], 
+                    fail: "نَاصِرٌ", maful: "مَنْصُورٌ", amr: "اُنْصُرْ", nahyi: "لَا تَنْصُرْ",
+                    zaman: "مَنْصَرٌ", makan: "مَنْصَرٌ", alat: "مِنْصَرٌ"
+                }
+            },
+            "استخرج": {
+                bina: "Salim", bab: "Tsulatsi Mazid Sudasi", arti: "Mengeluarkan / Menambang",
+                istilahiy: {
+                    madhi: "اِسْتَخْرَجَ", mudhori: "يَسْتَخْرِجُ", masdar: ["اِسْتِخْرَاجًا"], 
+                    fail: "مُسْتَخْرِجٌ", maful: "مُسْتَخْرَجٌ", amr: "اِسْتَخْرِجْ", nahyi: "لَا تَسْتَخْرِجْ",
+                    zaman: "مُسْتَخْرَجٌ", makan: "مُسْتَخْرَجٌ", alat: "-(Ghoir Qiyasi)"
+                }
+            },
+            "أكرم": {
+                bina: "Mahmuz Fa'", bab: "Tsulatsi Mazid Ruba'i", arti: "Memuliakan",
+                istilahiy: {
+                    madhi: "أَكْرَمَ", mudhori: "يُكْرِمُ", masdar: ["إِكْرَامًا"], 
+                    fail: "مُكْرِمٌ", maful: "مُكْرَمٌ", amr: "أَكْرِمْ", nahyi: "لَا تُكْرِمْ",
+                    zaman: "مُكْرَمٌ", makan: "مُكْرَمٌ", alat: "-(Ghoir Qiyasi)"
+                }
+            },
+            "قال": {
+                bina: "Ajwaf Wawi", bab: "Tsulatsi Mujarrad", arti: "Berkata",
+                istilahiy: {
+                    madhi: "قَالَ", mudhori: "يَقُولُ", masdar: ["قَوْلًا", "قِيْلًا", "مَقَالًا"], 
+                    fail: "قَائِلٌ", maful: "مَقُولٌ", amr: "قُلْ", nahyi: "لَا تَقُلْ",
+                    zaman: "مَقَالٌ", makan: "مَقَالٌ", alat: "-(Tidak Ada)"
+                }
+            }
+        };
+
+        const DHOMIR_LIST = [
+            {d: "هُوَ", k: "Mufrod Muzakkar Ghoib"}, {d: "هُمَا", k: "Tatsniyah Muzakkar Ghoib"}, {d: "هُمْ", k: "Jama' Muzakkar Ghoib"},
+            {d: "هِيَ", k: "Mufrod Muannats Ghoibah"}, {d: "هُمَا", k: "Tatsniyah Muannats Ghoibah"}, {d: "هُنَّ", k: "Jama' Muannats Ghoibah"},
+            {d: "أَنْتَ", k: "Mufrod Muzakkar Mukhotob"}, {d: "أَنْتُمَا", k: "Tatsniyah Muzakkar Mukhotob"}, {d: "أَنْتُمْ", k: "Jama' Muzakkar Mukhotob"},
+            {d: "أَنْتِ", k: "Mufrod Muannats Mukhotobah"}, {d: "أَنْتُمَا", k: "Tatsniyah Muannats Mukhotobah"}, {d: "أَنْتُنَّ", k: "Jama' Muannats Mukhotobah"},
+            {d: "أَنَا", k: "Mutakallim Wahdah"}, {d: "نَحْنُ", k: "Mutakallim Ma'al Ghoir"}
+        ];
+
+        let currentEntry = null;
+
+        function cariLafadz() {
+            const input = document.getElementById('searchInput').value.trim();
+            currentEntry = MUJAM_DATA[input];
+
+            if (!currentEntry) {
+                alert("Lafadz tidak ditemukan di database rujukan Munawwir/Munjid/Lisan. Pastikan input sesuai (contoh: نصر).");
+                return;
+            }
+
+            document.getElementById('resultPanel').classList.remove('hidden');
+            document.getElementById('resBina').innerText = currentEntry.bina;
+            document.getElementById('resBab').innerText = currentEntry.bab;
+            document.getElementById('resArti').innerText = currentEntry.arti;
+
+            renderIstilahiy();
+        }
+
+        function renderIstilahiy() {
+            const grid = document.getElementById('istilahiyGrid');
+            grid.innerHTML = '';
+
+            const shighahNames = {
+                madhi: "Fi'il Madhi", mudhori: "Fi'il Mudhori'", masdar: "Isim Masdar",
+                fail: "Isim Fa'il", maful: "Isim Maf'ul", amr: "Fi'il Amr",
+                nahyi: "Fi'il Nahyi", zaman: "Isim Zaman", makan: "Isim Makan", alat: "Isim Alat"
+            };
+
+            for (let [key, name] of Object.entries(shighahNames)) {
+                const val = currentEntry.istilahiy[key];
+                let displayVal = Array.isArray(val) ? val.join(" / ") : val;
+                let masdarLabel = (key === 'masdar' && val.length > 1) ? `<span class="masdar-badge">Multi-Masdar</span>` : "";
+
+                const card = document.createElement('div');
+                card.className = "border-2 border-slate-100 p-4 rounded-xl text-center cursor-pointer hover:shadow-md transition-all bg-white";
+                card.innerHTML = `
+                    <div class="text-xs font-sans-custom text-slate-500 mb-2">${name} ${masdarLabel}</div>
+                    <div class="arabic-text text-indigo-900">${displayVal}</div>
+                `;
+                card.onclick = () => renderLughawiy(key, name);
+                grid.appendChild(card);
+                
+                // Default view: Fi'il Madhi
+                if(key === 'madhi') card.classList.add('active-shighah');
+            }
+            renderLughawiy('madhi', "Fi'il Madhi");
+        }
+
+        function renderLughawiy(shighahKey, shighahName) {
+            // Update UI Active State
+            document.querySelectorAll('#istilahiyGrid div').forEach(el => el.classList.remove('active-shighah'));
+            document.getElementById('targetLughawiy').innerText = shighahName;
+
+            const body = document.getElementById('lughawiyBody');
+            body.innerHTML = '';
+
+            const base = currentEntry.istilahiy[shighahKey];
+            const displayBase = Array.isArray(base) ? base[0] : base;
+
+            DHOMIR_LIST.forEach((item, index) => {
+                let lafadz = generateLughawiyLogic(displayBase, shighahKey, index, currentEntry.bina);
+                let catatan = getIlalNote(shighahKey, index, currentEntry.bina);
+
+                const row = document.createElement('tr');
+                row.className = "border-b hover:bg-slate-50 transition";
+                row.innerHTML = `
+                    <td class="p-4 text-left border-r bg-slate-50">
+                        <div class="font-bold text-slate-800">${item.d}</div>
+                        <div class="text-xs text-slate-500 font-sans-custom">${item.k}</div>
+                    </td>
+                    <td class="p-4 font-bold text-indigo-950">${lafadz}</td>
+                    <td class="p-4 text-center"><span class="text-xs font-sans-custom bg-amber-100 px-2 py-1 rounded text-amber-800">${catatan}</span></td>
+                `;
+                body.appendChild(row);
+            });
+        }
+
+        function generateLughawiyLogic(base, shighah, index, bina) {
+            // Logika simulasi konjugasi dengan deteksi I'lal/Imla' sederhana
+            // Untuk aplikasi produksi, ini menggunakan tabel mapping ribuan entri
+            if (shighah === 'madhi') {
+                if (bina === "Salim") {
+                    const suffixes = ["َ", "َا", "ُوا", "َتْ", "َتَا", "ْنَ", "ْتَ", "ْتُمَا", "ْتُمْ", "ْتِ", "ْتُمَا", "ْتُنَّ", "ْتُ", "ْنَا"];
+                    return base.slice(0, -1) + suffixes[index];
+                }
+                if (bina === "Ajwaf Wawi") {
+                    const ajwafSuffix = ["َالَ", "َالَا", "َالُوا", "َالَتْ", "َالَتَا", "ُلْنَ", "ُلْتَ", "ُلْتُمَا", "ُلْتُمْ", "ُلْتِ", "ُلْتُمَا", "ُلْتُنَّ", "ُلْتُ", "ُلْنَا"];
+                    return base.slice(0, 1) + ajwafSuffix[index];
+                }
+            }
+            // Fallback untuk demo
+            return base + "..."; 
+        }
+
+        function getIlalNote(shighah, index, bina) {
+            if (bina === "Ajwaf Wawi" && shighah === 'madhi' && index >= 5) return "I'lal Hadzfu (Membuang Huruf Illat)";
+            if (bina === "Mahmuz" || shighah === 'amr') return "Kaidah Imla' Hamzah";
+            return "Ashli (Sesuai Qoidah)";
+        }
+    </script>
+</body>
+</html>
