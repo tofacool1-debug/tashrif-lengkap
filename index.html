@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TasrifPro - Tasrif Tsulasi Lengkap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📚 TasrifPro</h1>
+    <p class="subtitle">Tasrif Tsulasi Mujarrod + Mazid Offline</p>
+
+    <div class="box">
+      <label>Pilih Bab:</label>
+      <select id="bab" onchange="tampilkanBab()">
+        <option value="">Pilih Bab</option>
+        <option value="bab1">الباب الأول فَعَلَ يَفْعُلُ</option>
+        <option value="bab2">الباب الثاني فَعَلَ يَفْعِلُ</option>
+        <option value="bab3">الباب الثالث فَعَلَ يَفْعَلُ</option>
+        <option value="bab4">الباب الرابع فَعِلَ يَفْعَلُ</option>
+        <option value="bab5">الباب الخامس فَعُلَ يَفْعُلُ</option>
+        <option value="bab6">الباب السادس فَعِلَ يَفْعِلُ</option>
+     </select>
+        
+      <label>Pilih Huruf Awal:</label>
+      <select id="huruf" onchange="tampilFiil()">
+        <option value="">-- Pilih Huruf --</option>
+        <option value="ا">ا - Alif</option>
+        <option value="ب">ب - Ba'</option>
+        <option value="ت">ت - Ta'</option>
+      </select>
+
+      <label>Pilih Fi'il Madhi:</label>
+      <select id="fiil" onchange="tampilIstilah()">
+        <option value="">-- Pilih Fi'il --</option>
+      </select>
+    </div>
+
+    <div id="hasil" class="box hasil"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
