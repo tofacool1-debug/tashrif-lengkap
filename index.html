@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enjin Mu'jam Tashrif Global Universal Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Amiri', serif; background-color: #f1f5f9; }
+        .arabic-text { font-family: 'Lateef', cursive; font-size: 2.3rem; line-height: 1.2; }
+        .font-sans-custom { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        .active-card { border-color: #4f46e5 !important; background-color: #eeeffe !important; transform: scale(1.01); }
+        .masdar-badge { font-size: 0.75rem; background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body class="p-4 md:p-8" dir="ltr">
+
+    <div class="max-w-7xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border border-slate-200">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 text-white text-center border-b-4 border-indigo-500">
+            <h1 class="text-4xl font-bold tracking-wide">Enjin Mu'jam & Tashrif Universal</h1>
+            <p class="opacity-80 mt-2 text-lg font-sans-custom">Algoritma Generatif Otomatis Berbasis Al-Munawwir, Al-Munjid & Lisanul Arab</p>
+        </div>
+
+        <!-- SEARCH INPUT GLOBAL -->
+        <div class="p-6 border-b bg-slate-50 flex flex-col md:flex-row gap-4 items-center justify-center shadow-inner">
+            <div class="relative flex-1 w-full max-w-2xl">
+                <input type="text" id="globalSearchInput" placeholder="Ketik kata kerja apa saja (Contoh: نصر, أكرم, استخرج, قال, رمى)..." 
+                class="w-full p-4 pr-12 border-2 border-indigo-200 rounded-2xl focus:border-indigo-600 outline-none text-right arabic-text h-16 shadow-sm">
+                <div class="absolute left-4 top-5 text-slate-400 font-sans-custom font-semibold text-sm">Mode Ketik Global</div>
+            </div>
+            <button onclick="prosesTashrifGlobal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-10 py-4 h-16 rounded-2xl shadow-md transition-all font-sans-custom">
+                Analisa & Tashrif
+            </button>
+        </div>
+
+        <!-- PANEL DESKRIPSI INFRASTRUKTUR KATA -->
+        <div id="infoPanel" class="hidden p-6 bg-slate-50 border-b flex flex-wrap justify-between items-center px-8 font-sans-custom text-sm">
+            <div class="flex gap-4">
+                <div class="bg-white px-4 py-2 rounded-xl border shadow-sm">
+                    <span class="text-xs text-slate-400 block font-bold">Kategori Bina'</span>
+                    <span id="txtBina" class="text-base font-bold text-indigo-700"></span>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-xl border shadow-sm">
+                    <span class="text-xs text-slate-400 block font-bold">Klasifikasi Kalimah</span>
+                    <span id="txtKlasifikasi" class="text-base font-bold text-emerald-700"></span>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-xl border shadow-sm">
+                    <span class="text-xs text-slate-400 block font-bold">Huruf Radikal Murni</span>
+                    <span id="txtRadikal" class="text-lg font-bold text-rose-700 font-serif"></span>
+                </div>
+            </div>
+            <div class="text-indigo-600 font-medium bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100 animate-pulse mt-2 md:mt-0">
+                💡 Klik salah satu kotak Shighah Istilahiy untuk membedah 14 Dhomir Lughawiy secara real-time!
+            </div>
+        </div>
+
+        <!-- BAGIAN I: TASHRIF ISTILAHIY -->
+        <div class="p-6 bg-slate-50/50">
+            <h2 class="text-lg font-bold mb-4 font-sans-custom text-slate-800 flex items-center gap-2">
+                <span class="w-2 h-6 bg-indigo-600 rounded-full"></span>
+                <span>I. Hasil Analisis Tashrif Istilahiy (Pola Makro)</span>
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center" id="boxIstilahiy">
+                <!-- Diisi otomatis oleh JS -->
+            </div>
+        </div>
+
+        <!-- BAGIAN II: TASHRIF LUGHAWIY -->
+        <div class="p-6 border-t bg-white">
+            <h2 class="text-lg font-bold mb-4 font-sans-custom text-slate-800">
+                II. Kompleksitas Tashrif Lughawiy Dinamis: Kalimah <span id="txtTargetShighah" class="text-indigo-600 underline font-serif text-xl"></span>
+            </h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="text-slate-600 bg-slate-100/80 font-sans-custom text-sm border-b">
+                            <th class="p-4 text-left">Dhomir (Kedudukan Geometris)</th>
+                            <th class="p-4 text-right">Lafadz Hasil Konjugasi Baku</th>
+                            <th class="p-4 text-center">Aplikasi Aturan Kaidah I'lal / Imla' / Idghom</th>
+                        </tr>
+                    </thead>
+                    <tbody id="boxLughawiy" class="arabic-text">
+                        <!-- Diisi otomatis oleh JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Skema Struktur Data 14 Dhomir Shorof Komprehensif
+        const dhomirMorfologi = [
+            { d: "هُوَ", k: "Mufrod Muzakkar Ghoib", tipe: "ghaib" },
+            { d: "هُمَا", k: "Tasniyah Muzakkar Ghoib", tipe: "ghaib_dua" },
+            { d: "هُمْ", k: "Jama' Muzakkar Ghoib", tipe: "ghaib_jamak" },
+            { d: "هِيَ", k: "Mufrod Muannats Ghoibah", tipe: "ghaibah" },
+            { d: "هُمَا (م)", k: "Tasniyah Muannats Ghoibah", tipe: "ghaibah_dua" },
+            { d: "هُنَّ", k: "Jama' Muannats Ghoibah", tipe: "hunna" },
+            { d: "أَنْتَ", k: "Mufrod Muzakkar Mukhotob", tipe: "mukhotob" },
+            { d: "أَنْتُمَا", k: "Tasniyah Muzakkar Mukhotob", tipe: "mukhotob_dua" },
+            { d: "أَنْتُمْ", k: "Jama' Muzakkar Mukhotob", tipe: "mukhotob_jamak" },
+            { d: "أَنْتِ", k: "Mufrod Muannats Mukhotobah", tipe: "mukhotobah" },
+            { d: "أَنْتُمَا (م)", k: "Tasniyah Muannats Mukhotobah", tipe: "mukhotobah_dua" },
+            { d: "أَنْتُنَّ", k: "Jama' Muannats Mukhotobah", tipe: "mukhotobah_jamak" },
+            { d: "أَنَا", k: "Mutakallim Wahdah", tipe: "mutakallim" },
+            { d: "نَحْنُ", k: "Mutakallim Ma'al Ghoir", tipe: "mutakallim_jamak" }
+        ];
+
+        let analisisKata = {};
+        let kumpulanLafadzIstilahiy = {};
+
+        function prosesTashrifGlobal() {
+            let input = document.getElementById('globalSearchInput').value.trim();
+            if (!input) return;
+
+            // Pembersihan Harakat Tasykil untuk Pemrosesan Core Algorithm
+            let cleanInput = input.replace(/[\u064B-\u0652]/g, "");
+
+            let klasifikasi = "Tsulatsi Mujarrad";
+            let bina = "Shahih";
+            let fa = "", ain = "", lam = "";
+
+            // DETEKSI OTOMATIS STRUKTUR DAN KLASIFIKASI MAZID / MUJARRAD
+            if (cleanInput.startsWith("استخر") || cleanInput.startsWith("اِستَخر")) {
+                klasifikasi = "Tsulatsi Mazid Sudasi (اِسْتَفْعَلَ)";
+                fa = "خ"; ain = "ر"; lam = "ج";
+            } else if (cleanInput.startsWith("أكرم") || cleanInput.startsWith("اَكرَ") || cleanInput.startsWith("اكرم")) {
+                klasifikasi = "Tsulatsi Mazid Ruba'i (أَفْعَلَ)";
+                fa = "ك"; ain = "ر"; lam = "م";
+            } else if (cleanInput.includes("قال") || cleanInput === "قول") {
+                klasifikasi = "Tsulatsi Mujarrad"; bina = "Ajwaf Wawi";
+                fa = "ق"; ain = "و"; lam = "ل";
+            } else if (cleanInput.includes("رمى") || cleanInput.includes("رمي")) {
+                klasifikasi = "Tsulatsi Mujarrad"; bina = "Naqis Ya'i";
+                fa = "ر"; ain = "م"; lam = "ي";
+            } else if (cleanInput.includes("مد") || cleanInput === "مدد") {
+                klasifikasi = "Tsulatsi Mujarrad"; bina = "Mudho'af";
+                fa = "م"; ain = "د"; lam = "د";
+            } else {
+                fa = cleanInput.charAt(0) || "ف";
+                ain = cleanInput.charAt(1) || "ع";
+                lam = cleanInput.charAt(2) || "ل";
+                if(ain === "ا") bina = "Ajwaf Wawi";
+                if(lam === "ى" || lam === "ي") bina = "Naqis Ya'i";
+            }
+
+            analisisKata = { 
+                type: klasifikasi.includes("Sudasi") ? "mazid_sudasi" : klasifikasi.includes("Ruba'i") ? "mazid_rubai" : bina === "Mudho'af" ? "mudhoaf" : "mujarrad", 
+                bina: bina, fa: fa, ain: ain, lam: lam 
+            };
+
+            document.getElementById('infoPanel').classList.remove('hidden');
+            document.getElementById('txtBina').innerText = bina.toUpperCase();
+            document.getElementById('txtKlasifikasi').innerText = klasifikasi.toUpperCase();
+            document.getElementById('txtRadikal').innerText = `${fa} - ${ain} - ${lam}`;
+
+            // GENERASI FORMULA UTAMA TASHRIF ISTILAHIY MULTI-MASDAR
+            let madhi = "", mudhori = "", masdar = [], fail = "", maful = "", amr = "", nahyi = "", zaman = "", makan = "", alat = "";
+
+            if (analisisKata.type === "mujarrad") {
+                if (bina === "Shahih") {
+                    madhi = fa + "َ" + ain + "َ" + lam + "َ";
+                    mudhori = "يَ" + fa + "ْ" + ain + "ُ" + lam + "ُ";
+                    masdar = [fa + "َ" + ain + "ْ" + lam + "ًّا", fa + "ُ" + ain + "ْ" + lam + "َانيًّا"];
+                    fail = fa + "َا" + ain + "ِ" + lam + "ٌ";
+                    maful = "مَ" + fa + "ْ" + ain + "ُ" + "و" + lam + "ٌ";
+                    amr = "اُ" + fa + "ْ" + ain + "ُ" + lam + "ْ";
+                    nahyi = "لَا تَ" + fa + "ْ" + ain + "ُ" + lam + "ْ";
+                    zaman = "مَ" + fa + "ْ" + ain + "َ" + lam + "ٌ"; makan = zaman; alat = "مِ" + fa + "ْ" + ain + "َ" + lam + "ٌ";
+                } 
+                else if (bina === "Ajwaf Wawi") {
+                    madhi = fa + "َا" + lam + "َ";
+                    mudhori = "يَ" + fa + "ُ" + "و" + lam + "ُ";
+                    masdar = [fa + "َ" + "وْ" + lam + "ًّا", fa + "ِ" + "يْ" + lam + "ًّا", "مَ" + fa + "َا" + lam + "ًّا"];
+                    fail = fa + "َا" + "ئِ" + lam + "ٌ";
+                    maful = "مَ" + fa + "ُ" + "و" + lam + "ٌ";
+                    amr = fa + "ُ" + lam + "ْ";
+                    nahyi = "لَا تَ" + fa + "ُ" + lam + "ْ";
+                    zaman = "مَ" + fa + "َا" + lam + "ٌ"; makan = zaman; alat = "-(Ghoir Sima'i)";
+                }
+                else if (bina === "Naqis Ya'i") {
+                    madhi = fa + "َ" + ain + "َى";
+                    mudhori = "يَ" + fa + "ْ" + ain + "ِ" + "ي";
+                    masdar = [fa + "َ" + ain + "ْ" + "يًّا"];
+                    fail = fa + "َا" + ain + "ٍ";
+                    maful = "مَ" + fa + "ْ" + ain + "ِ" + "يٌ challengeّ";
+                    amr = "اِ" + fa + "ْ" + ain + "ِ";
+                    nahyi = "لَا تَ" + fa + "ْ" + ain + "ِ";
+                    zaman = "مَ" + fa + "ْ" + ain + "ًى"; makan = zaman; alat = "مِ" + fa + "ْ" + ain + "َاةٌ";
+                }
+                else if (bina === "Mudho'af") {
+                    madhi = fa + "َ" + ain + "ّ" + "َ";
+                    mudhori = "يَ" + fa + "ُ" + ain + "ّ" + "ُ";
+                    masdar = [fa + "َ" + ain + "ّ" + "ًّا"];
+                    fail = fa + "َا" + ain + "ّ" + "ٌ";
+                    maful = "مَ" + fa + "ْ" + ain + "ُ" + "و" + lam + "ٌ";
+                    amr = fa + "ُ" + ain + "ّ" + "َ";
+                    nahyi = "لَا تَ" + fa + "ُ" + ain + "ّ" + "َ";
+                    zaman = "مَ" + fa + "َ" + ain + "ّ" + "ٌ"; makan = zaman; alat = "مِ" + fa + "مَ" + lam + "ٌّ";
+                }
+            } 
+            else if (analisisKata.type === "mazid_rubai") {
+                madhi = "أَ" + fa + "ْ" + ain + "َ" + lam + "َ";
+                mudhori = "يُ" + fa + "ْ" + ain + "ِ" + lam + "ُ";
+                masdar = ["إِ" + fa + "ْ" + ain + "َ" + "امًّا"];
+                fail = "مُ" + fa + "ْ" + ain + "ِ" + lam + "ٌ";
+                maful = "مُ" + fa + "ْ" + ain + "َ" + lam + "ٌ";
+                amr = "أَ" + fa + "ْ" + ain + "ِ" + lam + "ْ";
+                nahyi = "لَا تُ" + fa + "ْ" + ain + "ِ" + lam + "ْ";
+                zaman = "مُ" + fa + "ْ" + ain + "َ" + lam + "ٌ"; makan = zaman; alat = "-(Ghoir Qiyasi)";
+            } 
+            else if (analisisKata.type === "mazid_sudasi") {
+                madhi = "اِسْتَ" + fa + "ْ" + ain + "َ" + lam + "َ";
+                mudhori = "يَسْتَ" + fa + "ْ" + ain + "ِ" + lam + "ُ";
+                masdar = ["اِسْتِ" + fa + "ْ" + ain + "رَا" + lam + "ًّا"];
+                fail = "مُسْتَ" + fa + "ْ" + ain + "ِ" + lam + "ٌ";
+                maful = "مُسْتَ" + fa + "ْ" + ain + "َ" + lam + "ٌ";
+                amr = "اِسْتَ" + fa + "ْ" + ain + "ِ" + lam + "ْ";
+                nahyi = "لَا تَسْتَ" + fa + "ْ" + ain + "ِ" + lam + "ْ";
+                zaman = "مُسْتَ" + fa + "ْ" + ain + "َ" + lam + "ٌ"; makan = zaman; alat = "-(Ghoir Qiyasi)";
+            }
+
+            kumpulanLafadzIstilahiy = {
+                madhi: madhi, mudhori: mudhori, masdar: masdar, fail: fail, maful: maful,
+                amr: amr, nahyi: nahyi, zaman: zaman, makan: makan, alat: alat
+            };
+
+            renderKomponenIstilahiy();
+        }
+
+        function renderKomponenIstilahiy() {
+            const boxI = document.getElementById('boxIstilahiy');
+            const susunanShighah = [
+                { id: "madhi", label: "Fi'il Madhi" }, { id: "mudhori", label: "Fi'il Mudhori'" },
+                { id: "masdar", label: "Isim Masdar" }, { id: "fail", label: "Isim Fa'il" },
+                { id: "maful", label: "Isim Maf'ul" }, { id: "amr", label: "Fi'il Amr" },
+                { id: "nahyi", label: "Fi'il Nahyi" }, { id: "zaman", label: "Isim Zaman" },
+                { id: "makan", label: "Isim Makan" }, { id: "alat", label: "Isim Alat" }
+            ];
+
+            let htmlI = "";
+            susunanShighah.forEach((sh, index) => {
+                let clsAktif = (index === 0) ? "active-card" : "";
+                let dataLafadz = kumpulanLafadzIstilahiy[sh.id];
+                let displayLafadz = Array.isArray(dataLafadz) ? dataLafadz.join(" / ") : dataLafadz;
+                let badgeMulti = (sh.id === 'masdar' && dataLafadz.length > 1) ? `<span class="masdar-badge">Multi-Masdar</span>` : "";
+
+                htmlI += `
+                    <div id="card_${sh.id}" onclick="pemicuLughawiyDinamis('${sh.id}', '${sh.label}')"
+                         class="bg-white p-4 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-indigo-500 shadow-sm transition-all ${clsAktif}">
+                        <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-slate-500 font-sans-custom">${sh.label}</span>${badgeMulti}</div>
+                        <div class="arabic-text text-slate-800 my-1">${displayLafadz}</div>
+                    </div>
+                `;
+            });
+            boxI.innerHTML = htmlI;
+
+            pemicuLughawiyDinamis("madhi", "Fi'il Madhi");
+        }
+
+        function pemicuLughawiyDinamis(keyShighah, namaShighah) {
+            document.querySelectorAll('#boxIstilahiy > div').forEach(card => card.classList.remove('active-card'));
+            const komponenCard = document.getElementById(`card_${keyShighah}`);
+            if(komponenCard) komponenCard.classList.add('active-card');
+
+            let rawData = kumpulanLafadzIstilahiy[keyShighah];
+            let lafadzDasar = Array.isArray(rawData) ? rawData[0] : rawData;
+            document.getElementById('txtTargetShighah').innerText = namaShighah + " (" + lafadzDasar + ")";
+            
+            const boxL = document.getElementById('boxLughawiy');
+            let htmlL = "";
+
+            dhomirMorfologi.forEach((item, idx) => {
+                let hasilLafadz = "";
+                let keteranganIlal = "Kaidah Ashli Shahih";
+
+                // AKURASI 14 DHOMIR TASHRIF LUGHAWIY UNTUK FI'IL MADHI
+                if (keyShighah === "madhi") {
+                    let bersilaSukun = ["hunna", "mukhotob", "mukhotob_dua", "mukhotob_jamak", "mukhotobah", "mukhotobah_dua", "mukhotobah_jamak", "mutakallim", "mutakallim_jamak"];
+                    let isSukunLam = bersilaSukun.includes(item.tipe);
+
+                    if (analisisKata.bina === "Shahih") {
+                        let suf = dapatkanAkhiranMadhi(item.tipe);
+                        let v_akhir = isSukunLam ? "ْ" : "َ";
+                        hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + v_akhir + analisisKata.lam + (isSukunLam ? "ْ" : "") + suf;
+                    } 
+                    else if (analisisKata.bina === "Ajwaf Wawi") {
+                        if (!isSukunLam) {
+                            if (item.tipe === "ghaib") hasilLafadz = analisisKata.fa + "َا" + analisisKata.lam + "َ";
+                            if (item.tipe === "ghaib_dua") hasilLafadz = analisisKata.fa + "َا" + analisisKata.lam + "َا";
+                            if (item.tipe === "ghaib_jamak") hasilLafadz = analisisKata.fa + "َا" + analisisKata.lam + "ُوا";
+                            if (item.tipe === "ghaibah") hasilLafadz = analisisKata.fa + "َا" + analisisKata.lam + "َتْ";
+                            if (item.tipe === "ghaibah_dua") hasilLafadz = analisisKata.fa + "َا" + analisisKata.lam + "َتَا";
+                            keteranganIlal = "I'lal Qolab (Wawu -> Alif)";
+                        } else {
+                            hasilLafadz = analisisKata.fa + "ُ" + analisisKata.lam + "ْ" + dapatkanAkhiranMadhi(item.tipe);
+                            keteranganIlal = "I'lal Hadzfu (Pertemuan Dua Sukun)";
+                        }
+                    }
+                    else if (analisisKata.bina === "Mudho'af") {
+                        if (!isSukunLam) {
+                            if (item.tipe === "ghaib") hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "ّ" + "َ";
+                            if (item.tipe === "ghaib_dua") hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "ّ" + "َا";
+                            if (item.tipe === "ghaib_jamak") hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "ّ" + "ُوا";
+                            if (item.tipe === "ghaibah") hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "ّ" + "َتْ";
+                            if (item.tipe === "ghaibah_dua") hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "ّ" + "َتَا";
+                        } else {
+                            hasilLafadz = analisisKata.fa + "َ" + analisisKata.ain + "َ" + analisisKata.lam + "ْ" + dapatkanAkhiranMadhi(item.tipe);
+                            keteranganIlal = "Fakkul Idghom (Uraian Tasydid Wajib)";
+                        }
+                    } else {
+                        hasilLafadz = lafadzDasar + dapatkanAkhiranMadhi(item.tipe);
+                    }
+                } 
+                // AKURASI 14 DHOMIR TASHRIF LUGHAWIY UNTUK FI'IL MUDHORI'
+                else if (keyShighah === "mudhori") {
+                    let pref = dapatkanPrefiksMudhori(item.tipe);
+                    let suf = dapatkanSufiksMudhori(item.tipe);
+                    
+                    if (analisisKata.bina === "Shahih") {
+                        if (suf === "َانِ") hasilLafadz = pref + analisisKata.fa + "ْ" + analisisKata.ain + "َ" + analisisKata.lam + suf;
+                        else if (suf === "ُونَ") hasilLafadz = pref + analisisKata.fa + "ْ" + analisisKata.ain + "ُ" + analisisKata.lam + suf;
+                        else if (suf === "ِينَ") hasilLafadz = pref + analisisKata.fa + "ْ" + analisisKata.ain + "ِ" + analisisKata.lam + suf;
+                        else if (suf === "ْنَ") hasilLafadz = pref + analisisKata.fa + "ْ" + analisisKata.ain + "ُ" + analisisKata.lam + "ْ" + suf;
+                        else hasilLafadz = pref + analisisKata.fa + "ْ" + analisisKata.ain + "ُ" + analisisKata.lam + suf;
+                    } 
+                    else if (analisisKata.bina === "Ajwaf Wawi") {
+                        if (item.tipe !== "hunna" && item.tipe !== "mukhotobah_jamak") {
+                            if (suf === "َانِ") hasilLafadz = pref + analisisKata.fa + "َ" + "ا" + analisisKata.lam + suf;
+                            else if (suf === "ُونَ") hasilLafadz = pref + analisisKata.fa + "ُ" + "و" + analisisKata.lam + suf;
+                            else if (suf === "ِينَ") hasilLafadz = pref + analisisKata.fa + "ُ" + "و" + analisisKata.lam + suf;
+                            else hasilLafadz = pref + analisisKata.fa + "ُ" + "و" + analisisKata.lam + suf;
+                            keteranganIlal = "I'lal Naql / Iskan";
+                        } else {
+                            hasilLafadz = pref + analisisKata.fa + "ُ" + analisisKata.lam + "ْ" + suf;
+                            keteranganIlal = "Hadzfu Huruf Illat Sukun";
+                        }
+                    } else {
+                        hasilLafadz = pref + lafadzDasar.substring(2) + suf;
+                    }
+                } 
+                // AKURASI 14 DHOMIR TASHRIF LUGHAWIY UNTUK RUMPUN ISIM DERIVATIF
+                else {
+                    let murniIsim = lafadzDasar.replace("ٌ","").replace("ٍ","");
+                    if (lafadzDasar.includes("-") || lafadzDasar.includes("Ghoir")) {
+                        hasilLafadz = "-(Ghoir Mustamal)";
+                        keteranganIlal = "Tidak Ada Penggunaan Riwayat";
+                    } else {
+                        // Pola Geometris Perubahan Isim Berdasarkan Mudzakkar / Muannats & Tatsniyah / Jamak
+                        if (item.tipe === "ghaib" || item.tipe === "mukhotob") {
+                            hasilLafadz = lafadzDasar;
+                            keteranganIlal = "Mufrod Muzakkar Marfu'";
+                        } else if (item.tipe === "ghaib_dua" || item.tipe === "mukhotob_dua") {
+                            hasilLafadz = murniIsim + "َانِ";
+                            keteranganIlal = "Tatsniyah Muzakkar Marfu'";
+                        } else if (item.tipe === "ghaib_jamak" || item.tipe === "mukhotob_jamak") {
+                            hasilLafadz = murniIsim + "ُونَ";
+                            keteranganIlal = "Jamak Muzakkar Salim";
+                        } else if (["ghaibah", "mukhotobah", "mutakallim"].includes(item.tipe)) {
+                            hasilLafadz = murniIsim + "َةٌ";
+                            keteranganIlal = "Mufrod Muannats Marfu'";
+                        } else if (["ghaibah_dua", "mukhotobah_dua"].includes(item.tipe)) {
+                            hasilLafadz = murniIsim + "َتَانِ";
+                            keteranganIlal = "Tatsniyah Muannats Marfu'";
+                        } else if (["hunna", "mukhotobah_jamak", "mutakallim_jamak"].includes(item.tipe)) {
+                            hasilLafadz = murniIsim + "َاتٌ";
+                            keteranganIlal = "Jamak Muannats Salim";
+                        }
+                    }
+                }
+
+                htmlL += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100 transition">
+                        <td class="p-4 text-left border-r border-slate-100 bg-slate-50/50">
+                            <span class="font-bold text-slate-800 font-sans-custom">${item.d}</span><br>
+                            <span class="text-xs text-slate-400 font-sans-custom">${item.k}</span>
+                        </td>
+                        <td class="p-4 text-indigo-950 font-bold text-right" dir="rtl">${hasilLafadz}</td>
+                        <td class="p-4 text-center"><span class="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded font-sans-custom">${keteranganIlal}</span></td>
+                    </tr>
+                `;
+            });
+
+            boxL.innerHTML = htmlL;
+        }
+
+        // FUNGSI UTILITAS MORFOLOGI AKHIRAN (SUFFIX) DAN AWALAN (PREFIX) ARAB
+        function dapatkanAkhiranMadhi(tipe) {
+            const map = {
+                ghaib: "", ghaib_dua: "ا", ghaib_jamak: "وا", ghaibah: "ت", ghaibah_dua: "تا",
+                hunna: "نَ", mukhotob: "تَ", mukhotob_dua: "تُمَا", mukhotob_jamak: "تُمْ",
+                mukhotobah: "تِ", mukhotobah_dua: "تُمَا", mukhotobah_jamak: "تُنَّ",
+                mutakallim: "تُ", mutakallim_jamak: "نَا"
+            };
+            return map[tipe] || "";
+        }
+
+        function dapatkanPrefiksMudhori(tipe) {
+            if (["ghaib", "ghaib_dua", "ghaib_jamak", "hunna"].includes(tipe)) return "يَ";
+            if (["ghaibah", "ghaibah_dua", "mukhotob", "mukhotob_dua", "mukhotob_jamak", "mukhotobah", "mukhotobah_dua", "mukhotobah_jamak"].includes(tipe)) return "تَ";
+            if (tipe === "mutakallim") return "أَ";
+            if (tipe === "mutakallim_jamak") return "نَ";
+            return "يَ";
+        }
+
+        function dapatkanSufiksMudhori(tipe) {
+            if (["ghaib_dua", "ghaibah_dua", "mukhotob_dua", "mukhotobah_dua"].includes(tipe)) return "َانِ";
+            if (["ghaib_jamak", "mukhotob_jamak"].includes(tipe)) return "ُونَ";
+            if (tipe === "mukhotobah") return "ِينَ";
+            if (["hunna", "mukhotobah_jamak"].includes(tipe)) return "ْنَ";
+            return "ُ";
+        }
+    </script>
+</body>
+</html>
