@@ -1,5 +1,5 @@
 const dataBab = {
-  "bab": {
+  "bab1": {
     "ا": [
       {madhi:"أَكَلَ", fa:"ا", ain:"ك", lam:"ل", illat:"salim", arti:"makan"},
       {madhi:"أَخَذَ", fa:"ا", ain:"خ", lam:"ذ", illat:"mahmuz_fa", arti:"mengambil"},
