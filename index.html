@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Tashrif & I'lal Engine Lengkap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Amiri', serif; background-color: #f1f5f9; }
+        .arabic-text { font-family: 'Lateef', cursive; font-size: 2rem; line-height: 1.1; }
+        .badge-bina { font-size: 0.75rem; font-family: sans-serif; background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+        .badge-ilal { font-size: 0.7rem; font-family: sans-serif; background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body class="p-4 md:p-8" dir="ltr">
+
+    <div class="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-800 to-teal-900 p-8 text-white text-center">
+            <h1 class="text-4xl font-bold">Arsitektur Tashrif & I'lal Komprehensif</h1>
+            <p class="opacity-80 mt-2 text-lg">Mendukung Seluruh Jenis Bina' (Shohih, Mudho'af, Mitsal, Ajwaf, Naqis, Lafif, Mahmuz)</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="p-6 border-b bg-slate-50 flex flex-wrap gap-4 items-end justify-center">
+            <div class="w-full md:w-52">
+                <label class="block text-sm font-bold text-slate-600 mb-2">3 Huruf Asal (Ketik Huruf Asli)</label>
+                <input type="text" id="rootInput" placeholder="Contoh: مدد ,قول ,رمي" maxlength="3" 
+                class="w-full p-4 border-2 border-emerald-100 rounded-xl text-center text-3xl arabic-text focus:border-emerald-500 outline-none transition-all">
+            </div>
+            
+            <div class="w-full md:w-64">
+                <label class="block text-sm font-bold text-slate-600 mb-2">Pilih Bab (Wazan Mujarrad)</label>
+                <select id="wazanSelect" class="w-full p-4 border-2 border-emerald-100 rounded-xl focus:border-emerald-500 outline-none">
+                    <option value="1">Bab 1 (فَعَلَ - يَفْعُلُ) - Contoh: نَصَرَ / قَالَ / مَدَّ</option>
+                    <option value="2">Bab 2 (فَعَلَ - يَفْعِلُ) - Contoh: ضَرَبَ / بَاعَ / رَمَى</option>
+                    <option value="3">Bab 3 (فَعَلَ - يَفْعَلُ) - Contoh: فَتَحَ / سَعَى</option>
+                    <option value="4">Bab 4 (فَعِلَ - يَفْعَلُ) - Contoh: عَلِمَ / خَافَ / رَضِيَ</option>
+                </select>
+            </div>
+
+            <button onclick="prosesTashrifLengkap()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-10 py-4 rounded-xl shadow-lg transform active:scale-95 transition-all">
+                Analisa & Tashrif
+            </button>
+        </div>
+
+        <!-- Info Bina -->
+        <div id="binaInfoBox" class="hidden p-4 bg-emerald-50 border-b border-emerald-100 text-center">
+            <span class="text-slate-700 font-sans font-semibold">Jenis Karakteristik Kata (Bina'): </span>
+            <span id="binaBadge" class="badge-bina"></span>
+        </div>
+
+        <!-- Result Table -->
+        <div class="p-6 overflow-x-auto">
+            <table class="w-full text-right border-collapse">
+                <thead>
+                    <tr class="text-slate-500 border-b-2 border-slate-100">
+                        <th class="p-4 text-left">Waqi' (Dhomir & Konteks)</th>
+                        <th class="p-4">Fi'il Madhi</th>
+                        <th class="p-4">Fi'il Mudhori'</th>
+                        <th class="p-4 text-center">Hukum / Aturan Shorof</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody" class="arabic-text">
+                    <tr><td colspan="4" class="text-center p-20 text-slate-300 font-sans italic">Silahkan masukkan 3 akar kata asli untuk memicu mesin I'lal otomatis...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const dhomirData = [
+            { d: "هُوَ", k: "Mufrod Muzakkar Ghoib", s_ma: "َ", p_mu: "يَ", s_mu: "ُ", type: "sakin" },
+            { d: "هُمَا", k: "Tasniyah Muzakkar Ghoib", s_ma: "َا", p_mu: "يَ", s_mu: "َانِ", type: "sakin" },
+            { d: "هُمْ", k: "Jama' Muzakkar Ghoib", s_ma: "ُوا", p_mu: "يَ", s_mu: "ُونَ", type: "jama_muzakkar" },
+            { d: "هِيَ", k: "Mufrod Muannats Ghoibah", s_ma: "َتْ", p_mu: "تَ", s_mu: "ُ", type: "sakin" },
+            { d: "هُمَا", k: "Tasniyah Muannats Ghoibah", s_ma: "َتَا", p_mu: "تَ", s_mu: "َانِ", type: "sakin" },
+            { d: "هُنَّ", k: "Jama' Muannats Ghoibah", s_ma: "ْنَ", p_mu: "يَ", s_mu: "ْنَ", type: "mutaharrik" },
+            { d: "أَنْتَ", k: "Mufrod Muzakkar Hadir", s_ma: "ْتَ", p_mu: "تَ", s_mu: "ُ", type: "mutaharrik" },
+            { d: "أَنْتُمَا", k: "Tasniyah Muzakkar Hadir", s_ma: "ْتُمَا", p_mu: "تَ", s_mu: "َانِ", type: "mutaharrik" },
+            { d: "أَنْتُمْ", k: "Jama' Muzakkar Hadir", s_ma: "ْتُمْ", p_mu: "تَ", s_mu: "ُونَ", type: "mutaharrik" },
+            { d: "أَنْتِ", k: "Mufrod Muannats Hadirah", s_ma: "ْتِ", p_mu: "تَ", s_mu: "ِينَ", type: "mutaharrik" },
+            { d: "أَنْتُنَّ", k: "Jama' Muannats Hadirah", s_ma: "ْتُنَّ", p_mu: "تَ", s_mu: "ْنَ", type: "mutaharrik" },
+            { d: "أَنَا", k: "Mutakallim Wahdah", s_ma: "ْتُ", p_mu: "أَ", s_mu: "ُ", type: "mutaharrik" },
+            { d: "نَحْنُ", k: "Mutakallim Ma'al Ghoir", s_ma: "ْنَا", p_mu: "نَ", s_mu: "ُ", type: "mutaharrik" }
+        ];
+
+        function analisisBina(fa, ain, lam) {
+            const illat = ['و', 'ي', 'ا', 'ى'];
+            const hamzah = 'أ';
+            
+            if (fa === hamzah || ain === hamzah || lam === hamzah) return "Mahmuz";
+            if (ain === lam) return "Mudho'af";
+            if (illat.includes(fa) && illat.includes(lam)) return "Lafif Mafruq";
+            if (illat.includes(ain) && illat.includes(lam)) return "Lafif Maqrun";
+            if (illat.includes(fa)) return "Mitsal";
+            if (illat.includes(ain)) return "Ajwaf";
+            if (illat.includes(lam)) return "Naqis";
+            return "Shohih";
+        }
+
+        function prosesTashrifLengkap() {
+            let root = document.getElementById('rootInput').value.trim();
+            const wazan = document.getElementById('wazanSelect').value;
+            const tbody = document.getElementById('resultBody');
+
+            if (root.length < 3) { alert("Wajib memasukkan 3 huruf asli akar kata!"); return; }
+
+            let fa = root[0]; let ain = root[1]; let lam = root[2];
+            let jenisBina = analisisBina(fa, ain, lam);
+
+            // Tampilkan Info Box Bina'
+            document.getElementById('binaInfoBox').classList.remove('hidden');
+            document.getElementById('binaBadge').innerText = jenisBina.toUpperCase();
+
+            // Set Harakat default berdasarkan Bab
+            let h_ain_ma = (wazan === "4") ? "ِ" : "َ";
+            let h_ain_mu = "ُ";
+            if (wazan === "2") h_ain_mu = "ِ";
+            if (wazan === "3" || wazan === "4") h_ain_mu = "َ";
+
+            let html = "";
+
+            dhomirData.forEach(item => {
+                let madhi = ""; let mudhori = ""; let catatan = "Ashli (Standar)";
+
+                // ==================== ENGINE LOGIKA MADHI ====================
+                if (jenisBina === "Mudho'af") {
+                    if (item.type === "sakin" || item.type === "jama_muzakkar") {
+                        madhi = fa + "َ" + ain + "ّ" + item.s_ma; 
+                        catatan = "Idghom (Peleburan Dua Huruf)";
+                    } else {
+                        madhi = fa + "َ" + ain + "َ" + lam + "ْ" + item.s_ma;
+                        catatan = "Fakkul Idghom (Uurai Sesuai Qaidah)";
+                    }
+                } 
+                else if (jenisBina === "Ajwaf") {
+                    if (item.type !== "mutaharrik") {
+                        madhi = fa + "َا" + lam + (item.s_ma === "َتْ" ? "تْ" : item.s_ma);
+                        if (item.d === "هُمْ") madhi = fa + "َا" + "لُ" + "وا";
+                        catatan = "I'lal Qolab (Wawu/Ya -> Alif)";
+                    } else {
+                        let harakatFakir = (wazan === "1") ? "ُ" : "ِ";
+                        madhi = fa + harakatFakir + lam + "ْ" + item.s_ma;
+                        catatan = "I'lal Hadzfu (Iltiqa'us Sakinain)";
+                    }
+                } 
+                else if (jenisBina === "Naqis") {
+                    if (item.d === "هُوَ") {
+                        madhi = fa + "َ" + ain + "َ" + (lam === 'و' ? 'ا' : 'ى');
+                        catatan = "Qolab Huruf Illat Akhir";
+                    } else if (item.type === "jama_muzakkar") {
+                        madhi = fa + "َ" + ain + "ُ" + item.s_ma;
+                        catatan = "Hadzfu Huruf Illat Akhir";
+                    } else {
+                        madhi = fa + "َ" + ain + "َ" + lam + "ْ" + item.s_ma;
+                    }
+                } 
+                else { // Shohih, Mitsal, Mahmuz
+                    let v_lam = (item.type === "mutaharrik") ? "ْ" : "َ";
+                    madhi = fa + "َ" + ain + h_ain_ma + lam + v_lam + item.s_ma;
+                }
+
+                // ==================== ENGINE LOGIKA MUDHORI ====================
+                if (jenisBina === "Mitsal" && fa === 'و' && (wazan === "2" || wazan === "3")) {
+                    // Kaidah Mitsal: Wawu dibuang di fi'il mudhori jika harakat ain-nya kasroh/fathah
+                    mudhori = item.p_mu + ain + h_ain_mu + lam + item.s_mu;
+                    catatan += " + Hadzfu Fa' (Mitsal Wawi)";
+                } 
+                else if (jenisBina === "Mudho'af") {
+                    if (item.d === "هُنَّ" || item.d === "أَنْتُنَّ") {
+                        mudhori = item.p_mu + fa + "ْ" + ain + h_ain_mu + lam + "ْ" + item.s_mu;
+                    } else {
+                        mudhori = item.p_mu + fa + "ُ" + ain + "ّ" + item.s_mu;
+                    }
+                } 
+                else if (jenisBina === "Ajwaf") {
+                    let hurufMadd = (wazan === "1") ? "و" : (wazan === "2" ? "ي" : "ا");
+                    if (item.d === "هُنَّ" || item.d === "أَنْتُنَّ") {
+                        mudhori = item.p_mu + fa + "َ" + lam + "ْ" + item.s_mu;
+                    } else {
+                        mudhori = item.p_mu + fa + "ُ" + hurufMadd + lam + item.s_mu;
+                    }
+                }
+                else if (jenisBina === "Naqis") {
+                    if (item.type === "jama_muzakkar") {
+                        mudhori = item.p_mu + fa + "ْ" + ain + "ُ" + item.s_mu;
+                    } else {
+                        mudhori = item.p_mu + fa + "ْ" + ain + h_ain_mu + (lam === 'ي' ? 'ي' : 'و') + item.s_mu;
+                    }
+                }
+                else { // Standar Shohih
+                    mudhori = item.p_mu + fa + "ْ" + ain + h_ain_mu + lam + item.s_mu;
+                }
+
+                // Penyesuaian khusus tulisan ortografi Alif Jama'ah (Imla')
+                if(madhi.endsWith("وا")) madhi = madhi.replace("وا", "ُوا");
+
+                html += `
+                    <tr class="hover:bg-emerald-50 border-b border-slate-100 transition">
+                        <td class="p-4 text-left">
+                            <span class="font-bold text-emerald-700">${item.d}</span><br>
+                            <span class="text-xs font-sans text-slate-400 uppercase tracking-wider">${item.k}</span>
+                        </td>
+                        <td class="p-4 text-slate-800 font-medium">${madhi}</td>
+                        <td class="p-4 text-slate-800 font-medium">${mudhori}</td>
+                        <td class="p-4 text-center">
+                            <span class="badge-ilal">${catatan}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
