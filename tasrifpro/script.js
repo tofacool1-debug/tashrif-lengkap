@@ -129,20 +129,28 @@ function terapkanIilal(fiil) {
 
 function tampilIstilah() {
   let f = fiilAktif;
-  let t = terapkanIilal(f);
+
+  let mudhori = terapkanIilal(f, "mudhori");
+  let amar = terapkanIilal(f, "amar");
+  let nahi = terapkanIilal(f, "nahi");
+  let masdar = terapkanIilal(f, "masdar");
+  
+  let fa=f.fa, ain=f.ain, lam=f.lam;
+  let isimFa = "آ" + ain + "ِ" + lam;
+  let isimMaf = "مَ" + fa + "ْ" + ain + "ُ" + lam;
+  let zaman = "مَ" + fa + "ْ" + ain + "َ" + lam;
 
   let hasil = `
   <h3>Tasrif Istilah Mujarrod Bab 1</h3>
-  <p><b>Madhi:</b> ${t.madhi}</p>
-  <p><b>Mudhori':</b> ${t.mudhori}</p>
-  <p><b>Amar:</b> ${t.amar}</p>
-  <p><b>Nahi:</b> ${t.nahi}</p>
-  <p><b>Isim Fa'il:</b> ${t.isim_fa}</p>
-  <p><b>Isim Maf'ul:</b> ${t.isim_maf}</p>
-  <p><b>Zaman/Makan:</b> ${t.zaman_makan}</p>
-  <p><b>Alat:</b> ${t.alat}</p>
+  <p><b>Madhi:</b> ${f.madhi}</p>
+  <p><b>Mudhori':</b> ${mudhori}</p>
+  <p><b>Amar:</b> ${amar}</p>
+  <p><b>Nahi:</b> ${nahi}</p>
+  <p><b>Masdar:</b> ${masdar}</p>
+  <p><b>Isim Fa'il:</b> ${isimFa}</p>
+  <p><b>Isim Maf'ul:</b> ${isimMaf}</p>
+  <p><b>Zaman/Makan:</b> ${zaman}</p>
   <p><b>Arti Munawwir:</b> ${f.arti}</p>
-  <small style="color:gray">${t.catatan}</small>
   `;
   document.getElementById('hasil').innerHTML = hasil;
-                    }
+}
