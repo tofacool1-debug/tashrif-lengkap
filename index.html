@@ -114,29 +114,67 @@ window.switchMode = async function(mode) {
 
 // Single tasrif - tetep kayak punya lu
 window.runTasrif = async function() {
+  const output = document.getElementById('output');
+  
   try {
+    // 1. Cek input
     const asal = document.getElementById('asal').value.trim();
     const bab = parseInt(document.getElementById('bab').value);
-
-    if(!asal || asal.split(' ').length !== 3) {
-      alert('Format asal harus 3 huruf dipisah spasi. Contoh: ك ت ب');
-      return;
-    }
-
-    console.log('Input:', asal, bab); // buat debug
+    output.innerHTML = `<div style="color:yellow">Step 1 OK: Input = ${asal}, Bab = ${bab}</div>`;
     
-    const data = OtakManager.tasrifLengkap(asal, bab); // pake tasrifLengkap
-    console.log('Hasil:', data); // buat debug
-    
-    tampilkanHasil(data);
-    await DBHandler.simpan({asal, bab, hasil: data});
+    if(!asal || asal.split(' ').length !== 3) throw new Error('Format asal salah. Harus: ك ت ب');
+
+    // 2. Cek OtakManager ada gak
+    if(typeof OtakManager === 'undefined') throw new Error('OtakManager undefined. Cek import');
+    output.innerHTML += `<div style="color:yellow">Step 2 OK: OtakManager ketemu</div>`;
+
+    // 3. Jalanin otak
+    const tabel = OtakManager.tasrif(asal, bab);
+    output.innerHTML += `<div style="color:yellow">Step 3 OK: Otak ngeluarin data</div>`;
+    console.log('DATA DARI OTAK:', tabel); // cek di console
+
+    // 4. Tampilin
+    tampilkanHasil(tabel);
+    output.innerHTML += `<div style="color:lightgreen">Step 4 OK: Selesai render</div>`;
+
+    // 5. Simpen DB
+    await DBHandler.simpan({asal, bab, hasil: tabel});
     
   } catch(e) {
-    document.getElementById('output').innerHTML = 
-      `<div style="color:red; padding:20px">ERROR: ${e.message}<br><br>${e.stack}</div>`;
+    // Kalo error, tampilin merah gede
+    output.innerHTML = `
+      <div style="color:red;background:#2a0000;padding:15px;border-radius:8px">
+        <b>ERROR KETEMU:</b><br>
+        ${e.message}<br><br>
+        <small>${e.stack}</small>
+      </div>
+    `;
+    console.error(e);
   }
 }
 
+function tampilkanHasil(tabel) {
+  const output = document.getElementById('output');
+  
+  // Debug isi tabel
+  output.innerHTML += `<pre style="color:cyan;font-size:10px">Isi tabel: ${JSON.stringify(tabel).substring(0,200)}...</pre>`;
+
+  if(!Array.isArray(tabel)) throw new Error('Return OtakManager bukan array. Isinya: ' + typeof tabel);
+
+  let html = '<table style="width:100%;border-collapse:collapse;margin-top:15px">';
+  tabel.forEach((baris, i) => {
+    html += '<tr>';
+    baris.forEach(sel => {
+      const tag = i === 0 ? 'th' : 'td';
+      const style = i === 0 ? 'background:#1e293b;font-weight:bold' : '';
+      html += `<${tag} style="border:1px solid #475569;padding:10px;${style}">${sel}</${tag}>`;
+    });
+    html += '</tr>';
+  });
+  html += '</table>';
+  output.innerHTML = html;
+}
+   
 function tampilkanHasil(data) {
   let html = `
     <div class="result">
