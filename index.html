@@ -114,20 +114,27 @@ window.switchMode = async function(mode) {
 
 // Single tasrif - tetep kayak punya lu
 window.runTasrif = async function() {
-  const asal = document.getElementById('asal').value.trim();
-  const bab = parseInt(document.getElementById('bab').value);
+  try {
+    const asal = document.getElementById('asal').value.trim();
+    const bab = parseInt(document.getElementById('bab').value);
 
-  if(!asal || asal.split(' ').length!== 3) {
-    alert('Format asal harus 3 huruf dipisah spasi. Contoh: م د');
-    return;
+    if(!asal || asal.split(' ').length !== 3) {
+      alert('Format asal harus 3 huruf dipisah spasi. Contoh: ك ت ب');
+      return;
+    }
+
+    console.log('Input:', asal, bab); // buat debug
+    
+    const data = OtakManager.tasrifLengkap(asal, bab); // pake tasrifLengkap
+    console.log('Hasil:', data); // buat debug
+    
+    tampilkanHasil(data);
+    await DBHandler.simpan({asal, bab, hasil: data});
+    
+  } catch(e) {
+    document.getElementById('output').innerHTML = 
+      `<div style="color:red; padding:20px">ERROR: ${e.message}<br><br>${e.stack}</div>`;
   }
-
-  const data = OtakManager.tasrif(asal, bab);
-  tampilkanHasil(data);
-
-  // Simpan ke IndexedDB juga biar ke-track
-  await DBHandler.simpan({asal, bab, hasil: data});
-  await updateDBCount();
 }
 
 function tampilkanHasil(data) {
