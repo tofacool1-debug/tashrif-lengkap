@@ -1,6 +1,6 @@
 const Kamus = [
-  {kata: "كتاب", arti: "Buku"},
-  {kata: "قلم", arti: "Pulpen"},
-  {kata: "مدرسة", arti: "Sekolah"},
-  {kata: "طالب", arti: "Murid"}
+  {kata: "ق و ل", arti: "Buku"},
+  {kata: "ب ي ع", arti: "Pulpen"},
+  {kata: "ص و م", arti: "Sekolah"},
+  {kata: "ط و ل", arti: "Murid"}
 ];
