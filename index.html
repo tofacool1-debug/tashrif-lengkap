@@ -24,6 +24,7 @@
 .info-item {background:#0f172a; padding:8px 12px; border-radius:6px; font-size:14px;}
 .info-item span {color:#38bdf8; font-weight:bold;}
   h3 {color:#38bdf8; margin:15px 0 10px; font-size:18px;}
+  h4 {color:#94a3b8; margin:10px 0 5px; font-size:15px;}
   table {width:100%; border-collapse:collapse; margin-bottom:20px; font-size:14px;}
   th {background:#334155; padding:10px; text-align:right;}
   td {padding:8px 10px; border-bottom:1px solid #334155;}
@@ -36,8 +37,9 @@
 .mode-switch button.active {background:#0ea5e9;}
 .hidden {display:none;}
 .db-info {font-size:12px; color:#94a3b8; margin-top:5px;}
+.error-box {color:red;background:#2a0000;padding:15px;border-radius:8px;margin-top:15px;}
   @media(max-width:600px){
-  .input-group {flex-direction:column;}
+ .input-group {flex-direction:column;}
     table {font-size:12px;}
     th, td {padding:6px;}
   }
@@ -45,7 +47,7 @@
 </head>
 <body>
 <div class="container">
-  <h1> OtakManager - Tasrif 7 Bina + IndexedDB</h1>
+  <h1>OtakManager - Tasrif 7 Bina + IndexedDB</h1>
 
   <div class="mode-switch">
     <button id="btnSingle" class="active" onclick="switchMode('single')">Single Tasrif</button>
@@ -55,14 +57,14 @@
   <!-- MODE SINGLE -->
   <div id="modeSingle">
     <div class="input-group">
-      <input type="text" id="asal" placeholder="Masukkan asal: م د" value="م د">
+      <input type="text" id="asal" placeholder="Masukkan asal: ق و ل" value="ق و ل">
       <select id="bab">
         <option value="1">Bab 1</option>
         <option value="2">Bab 2</option>
         <option value="3">Bab 3</option>
-        <option value="1">Bab 4</option>
-        <option value="2">Bab 5</option>
-        <option value="3">Bab 6</option>
+        <option value="4">Bab 4</option>
+        <option value="5">Bab 5</option>
+        <option value="6">Bab 6</option>
       </select>
       <button onclick="runTasrif()">Tasrif</button>
     </div>
@@ -73,7 +75,7 @@
     <p class="db-info">Format: asal|bab per baris. Data auto simpan ke IndexedDB</p>
     <textarea id="inputBulk" placeholder="ك ت ب|1
 ق ر أ|1
-ف ع ل|2"></textarea>
+ق و ل|1"></textarea>
     <div>
       <button onclick="tasrifBulk()">Tasrif Bulk</button>
       <button onclick="exportJSON()">Export JSON</button>
@@ -88,7 +90,7 @@
 </div>
 
 <script type="module">
-import OtakManager from './OtakManager.js';
+import OtakManager from './OtakManager.js'; // huruf kecil, samain nama file lu
 import InputHandler from './input_handler.js';
 import DBHandler from './db_handler.js';
 
@@ -112,38 +114,30 @@ window.switchMode = async function(mode) {
   }
 }
 
-// Single tasrif - tetep kayak punya lu
+// Single tasrif - versi perfect
 window.runTasrif = async function() {
   const output = document.getElementById('output');
-  
+
   try {
-    // 1. Cek input
     const asal = document.getElementById('asal').value.trim();
     const bab = parseInt(document.getElementById('bab').value);
-    output.innerHTML = `<div style="color:yellow">Step 1 OK: Input = ${asal}, Bab = ${bab}</div>`;
-    
-    if(!asal || asal.split(' ').length !== 3) throw new Error('Format asal salah. Harus: ك ت ب');
 
-    // 2. Cek OtakManager ada gak
-    if(typeof OtakManager === 'undefined') throw new Error('OtakManager undefined. Cek import');
-    output.innerHTML += `<div style="color:yellow">Step 2 OK: OtakManager ketemu</div>`;
+    if(!asal || asal.split(' ').length!== 3) {
+      throw new Error('Format asal salah. Harus: ك ت ب atau ق و ل');
+    }
 
-    // 3. Jalanin otak
-    const tabel = OtakManager.tasrif(asal, bab);
-    output.innerHTML += `<div style="color:yellow">Step 3 OK: Otak ngeluarin data</div>`;
-    console.log('DATA DARI OTAK:', tabel); // cek di console
+    output.innerHTML = `<div style="color:#fbbf24">Lagi proses...</div>`;
 
-    // 4. Tampilin
-    tampilkanHasil(tabel);
-    output.innerHTML += `<div style="color:lightgreen">Step 4 OK: Selesai render</div>`;
+    const hasil = OtakManager.tasrif(asal, bab);
+    console.log('DATA DARI OTAK:', hasil);
 
-    // 5. Simpen DB
-    await DBHandler.simpan({asal, bab, hasil: tabel});
-    
+    tampilkanHasil(hasil);
+
+    await DBHandler.simpan({asal, bab, hasil});
+
   } catch(e) {
-    // Kalo error, tampilin merah gede
     output.innerHTML = `
-      <div style="color:red;background:#2a0000;padding:15px;border-radius:8px">
+      <div class="error-box">
         <b>ERROR KETEMU:</b><br>
         ${e.message}<br><br>
         <small>${e.stack}</small>
@@ -153,28 +147,7 @@ window.runTasrif = async function() {
   }
 }
 
-function tampilkanHasil(tabel) {
-  const output = document.getElementById('output');
-  
-  // Debug isi tabel
-  output.innerHTML += `<pre style="color:cyan;font-size:10px">Isi tabel: ${JSON.stringify(tabel).substring(0,200)}...</pre>`;
-
-  if(!Array.isArray(tabel)) throw new Error('Return OtakManager bukan array. Isinya: ' + typeof tabel);
-
-  let html = '<table style="width:100%;border-collapse:collapse;margin-top:15px">';
-  tabel.forEach((baris, i) => {
-    html += '<tr>';
-    baris.forEach(sel => {
-      const tag = i === 0 ? 'th' : 'td';
-      const style = i === 0 ? 'background:#1e293b;font-weight:bold' : '';
-      html += `<${tag} style="border:1px solid #475569;padding:10px;${style}">${sel}</${tag}>`;
-    });
-    html += '</tr>';
-  });
-  html += '</table>';
-  output.innerHTML = html;
-}
-   
+// SATU FUNGSI DOANG - yg nerima object
 function tampilkanHasil(data) {
   let html = `
     <div class="result">
