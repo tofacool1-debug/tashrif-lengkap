@@ -1,4 +1,4 @@
-import OtakManager from './otak_manager.js';
+import OtakManager from './OtakManager.js';
 import DBHandler from './db_handler.js';
 
 class InputHandler {
