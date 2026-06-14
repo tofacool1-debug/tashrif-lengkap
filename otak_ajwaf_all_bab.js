@@ -1,4 +1,4 @@
-class OtakAjwafAllBab {
+export default class OtakAjwafAllBab {
   constructor(asal = 'ق و ل', bab = 1) {
     this.asal = asal;
     [this.f, this.ain, this.lam] = asal.split(' ');
