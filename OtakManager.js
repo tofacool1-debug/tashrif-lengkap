@@ -1,3 +1,4 @@
+import Kamus from './data.js';
 import OtakShohihAllBab from './otak_shohih_all_bab.js';
 import OtakMudhoafAllBab from './otak_mudhoaf_all_bab.js';
 import OtakAjwafAllBab from './otak_ajwaf_all_bab.js';
