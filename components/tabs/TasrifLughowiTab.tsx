@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Clipboard } from "react-native";
 import { TasrifIstilahi, TasrifLughowi } from "../../types";
-import { IilalEngine } from "../../utils/tasrifEngine";
+import { tasrifEngine } from "../../utils/tasrifEngine";
 import { PRONOUNS_14, PRONOUNS_12, PRONOUNS_ISIM_6 } from "../../data/dictionary";
 import {
   Info, Copy, LockClosed, Sparkles, Book, Pulse, Ribbon,
@@ -69,7 +69,7 @@ export default function TasrifLughowiView({
   };
 
   const lughowi: TasrifLughowi = useMemo(() =>
-    IilalEngine.tasrifLughowi(tasrif, fa, ain, lam, bina, babNum),
+    tasrifEngine.tasrifLughowi(tasrif, fa, ain, lam, bina, babNum),
   [tasrif, fa, ain, lam, bina, babNum]);
 
   const conjugateNoun6 = (bentukMufrod: string): string[] => {
