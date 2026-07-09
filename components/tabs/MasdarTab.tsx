@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Clipboard } from "react-native";
 import { DictionaryEntry, ThemeColors } from "../../types";
-import { IilalEngine } from "../../utils/iilalEngine";
+import { IilalEngine } from "../../utils/tasrifEngine";
 import { getVocalizedRoot } from "../../data/dictionary";
 import { Grid, InformationCircle } from "@expo/vector-icons/Ionicons";
 
