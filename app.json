@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Shorof Digital Pro",
+    "slug": "shorof-offline",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "shorof-digital",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.shorof.digital"
+    },
+    "android": {
+      "package": "com.shorof.digital",
+      "backgroundColor": "#ffffff"
+    },
+    "web": {
+      "favicon": "./assets/images/icon.png"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      "expo-status-bar",
+      "expo-splash-screen",
+      "expo-sharing",
+      "expo-build-properties"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "updates": {
+      "url": "https://u.expo.dev/be0b9135-23a5-4baf-996c-d56afb9c8660",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "be0b9135-23a5-4baf-996c-d56afb9c8660"
+      }
+    }
+  }
+}
