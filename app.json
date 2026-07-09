@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Shorof Digital Pro",
-    "slug": "shorof-offline",
+    "slug": "sdm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -31,7 +31,7 @@
       "reactCompiler": true
     },
     "updates": {
-      "url": "https://u.expo.dev/be0b9135-23a5-4baf-996c-d56afb9c8660",
+      "url": "https://u.expo.dev/3ba358ae-3f70-41b6-8c7a-c800d271fb21",
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0
@@ -41,7 +41,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "be0b9135-23a5-4baf-996c-d56afb9c8660"
+        "projectId": "3ba358ae-3f70-41b6-8c7a-c800d271fb21"
       }
     }
   }
