@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { DictionaryEntry, ThemeColors, JamakTabType, PluralIsimFail, PluralIsimMaful, PluralIsimZamanMakan, PluralIsimAlat } from "../../types";
-import { getTasrifIstilahi } from "../../utils/iilalEngine";
+import { getTasrifIstilahi } from "../../utils/tasrifEngine";
 import { analyzeIsimFailPlural, analyzeIsimMafulPlural, analyzeIsimZamanMakanPlural, analyzeIsimAlatPlural } from "../../utils/jamakEngine";
 
 interface Props {
