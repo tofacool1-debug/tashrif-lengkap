@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { DictionaryEntry, ThemeColors } from "../../types";
 import { analyzeSifatMusyabihatPlural } from "../../utils/sifatEngine";
-import { getTasrifIstilahi } from "../../utils/iilalEngine";
+import { getTasrifIstilahi } from "../../utils/tasrifEngine";
 
 interface Props {
   entry: DictionaryEntry;
