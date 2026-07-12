@@ -338,7 +338,7 @@ export const IilalEngine = {
       `${prefY}${stemBody}${KASRA}ي`, `${prefY}${stemBody}${KASRA}يَانِ`, `${prefY}${stemBody}${DAMMA}ونَ`,
       `${prefT}${stemBody}${KASRA}ي`, `${prefT}${stemBody}${KASRA}يَانِ`, `${prefY}${stemBody}${KASRA}يْنَ`,
       `${prefT}${stemBody}${KASRA}ي`, `${prefT}${stemBody}${KASRA}يَانِ`, `${prefT}${stemBody}${DAMMA}ونَ`,
-      `${prefT}${stemBody}${KASRA}inَ`, `${prefT}${stemBody}${KASRA}يَانِ`, `${prefT}${stemBody}${KASRA}يْنَ`,
+      `${prefT}${stemBody}${KASRA}ان`, `${prefT}${stemBody}${KASRA}يَانِ`, `${prefT}${stemBody}${KASRA}يْنَ`,
       `${prefA}${stemBody}${KASRA}ي`, `${prefN}${stemBody}${KASRA}ي`
     ];
   }
