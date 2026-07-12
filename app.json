@@ -19,12 +19,7 @@
       "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-      "expo-font",
-      "expo-router",
-      "expo-status-bar",
-      "expo-splash-screen",
-      "expo-sharing",
-      "expo-build-properties"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
