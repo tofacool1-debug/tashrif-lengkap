@@ -82,8 +82,6 @@ export interface PluralSifatMusyabihat {
   wazanName?: string;
   isQiyasi: boolean; 
   isSamai: boolean; 
-  reference: string; 
-  explanation: string; 
 }
 
 export interface JamakData {
