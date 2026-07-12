@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM"
-    ],
     "allowJs": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
@@ -28,15 +24,6 @@
       ],
       "@/components/*": [
         "components/*"
-      ],
-      "@/lib/*": [
-        "lib/*"
-      ],
-      "@/utils/*": [
-        "utils/*"
-      ],
-      "@/context/*": [
-        "context/*"
       ],
       "@/types/*": [
         "types/*"
