@@ -24,9 +24,10 @@
     "typescript": "^5.6.3"
   },
   "expo": {
-  "install": {
-    "exclude": ["@react-native-picker/picker"]
-  }
-}
+    "owner": "nisa46s-team",
+    "install": {
+      "exclude": ["@react-native-picker/picker"]
+    }
+  },
   "private": true
 }
