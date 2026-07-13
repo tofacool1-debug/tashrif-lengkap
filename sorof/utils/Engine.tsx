@@ -348,7 +348,7 @@ const prefY = baseMudhari.charAt(0) + baseMudhari.charAt(1);
 const prefT = prefY.replace("ي", "ت"); const prefA = prefY.replace("ي", "أ"); const prefN = prefY.replace("ي", "ن");
 const baseBody = baseMudhari.substring(2, baseMudhari.length - 1);
 const shortenAjwafPlural = (v: string) => v.replace(new RegExp(`و${lam}[\u0652]*ْنَ$`), `${lam}${SUKUN}ْنَ`).replace(new RegExp(`ي${lam}[\u0652]*ْنَ$`), `${lam}${SUKUN}ْنَ`).replace(new RegExp(`ا${lam}[\u0652]*ْنَ$`), `${lam}${SUKUN}ْنَ`);
-const resList = [prefY + baseBody + DAMMA, prefY + baseBody + FATHA + "انِ", prefY + baseBody + DAMMA + "ونَ", prefT + baseBody + DAMMA, prefT + baseBody + FATHA + "انِ", prefY + baseBody + SUKUN + "ْنَ", prefT + baseBody + DAMMA, prefT + baseBody + FATHA + "انِ", prefT + baseBody + DAMMA + "ونَ", prefT + baseBody + KASRA + "ينَ", prefT + baseBody + FATHA + "anِ", prefT + baseBody + SUKUN + "ْنَ", prefA + baseBody + DAMMA, prefN + baseBody + DAMMA];
+const resList = [prefY + baseBody + DAMMA, prefY + baseBody + FATHA + "انِ", prefY + baseBody + DAMMA + "ونَ", prefT + baseBody + DAMMA, prefT + baseBody + FATHA + "انِ", prefY + baseBody + SUKUN + "ْنَ", prefT + baseBody + DAMMA, prefT + baseBody + FATHA + "انِ", prefT + baseBody + DAMMA + "ونَ", prefT + baseBody + KASRA + "ينَ", prefT + baseBody + FATHA + "ان", prefT + baseBody + SUKUN + "ْنَ", prefA + baseBody + DAMMA, prefN + baseBody + DAMMA];
 if (bina === "Ajwaf") { resList[5] = shortenAjwafPlural(resList[5]); resList[11] = shortenAjwafPlural(resList[11]); }
       return resList;
     };
