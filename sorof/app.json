@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Shorof Digital Pro",
+    "slug": "sdm",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "shorof-digital",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.shorof.digital"
+    },
+    "android": {
+      "package": "com.shorof.digital",
+      "backgroundColor": "#ffffff"
+    },
+    "web": {
+      "favicon": "./assets/images/icon.png"
+    },
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3ba358ae-3f70-41b6-8c7a-c800d271fb21",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3ba358ae-3f70-41b6-8c7a-c800d271fb21"
+      }
+    }
+  }
+}
