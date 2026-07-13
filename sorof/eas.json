@@ -14,8 +14,7 @@
         "buildType": "apk"
       },
       "cache": {
-        "key": "v3-sdk52",
-        "customPaths": ["node_modules"]
+        "key": "v3-sdk52"
       }
     },
     "preview": {
