@@ -21,4 +21,4 @@ jobs:
       
       - run: npm ci
 
-      - run: eas update --branch production --auto
+      - run: eas update --branch production --non-interactive
