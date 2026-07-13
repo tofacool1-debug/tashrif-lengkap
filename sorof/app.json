@@ -20,8 +20,7 @@
       "favicon": "./assets/images/icon.png"
     },
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     },
     "updates": {
       "url": "https://u.expo.dev/3ba358ae-3f70-41b6-8c7a-c800d271fb21",
