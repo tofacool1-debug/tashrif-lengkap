@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Alat Tasrif",
-    "slug": "tasrif-app",
+    "name": "sorof digital",
+    "slug": "sdm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,9 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sdm.sorofdigital"
     },
     "android": {
+      "package": "com.sdm.sorofdigital",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#2563eb"
